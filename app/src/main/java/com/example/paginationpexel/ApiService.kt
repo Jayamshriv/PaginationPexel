@@ -9,12 +9,12 @@ import retrofit2.http.Query
 interface ApiService {
 
 //    /authHeader : String = Constants.API_KEY
-    @Headers("Authorization : ${Constants.API_KEY}")
     @GET("v1/search/")
     suspend fun getPhotos(
-        @Query("query") query : String = "nature",
-        @Query("per_page") per_page : Int,
-        @Query("page") page : Int,
+        @Query("query") query : String? = "nature",
+        @Query("per_page") per_page : Int?,
+        @Query("page") page : Int?,
+        @Header("Authorization") authHeader : String? = Constants.API_KEY
     ) : PexelDto
 
 }

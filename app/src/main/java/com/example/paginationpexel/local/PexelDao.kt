@@ -24,10 +24,10 @@ interface PexelDao {
     //--------------------remote key------------//
 
     @Query("SELECT * FROM remoteKeyTable WHERE id = :id")
-    fun getRemoteKeys(id: Int): RemoteKeysEntity
+    suspend fun getRemoteKeys(id: Int): RemoteKeysEntity
 
     @Upsert
-    suspend fun insertAllRemoteKeys(remoteKeysEntity: List<RemoteKeysEntity>)
+    suspend fun insertAllRemoteKeys(remoteKeysEntity: RemoteKeysEntity)
 
     @Query("DELETE FROM remoteKeyTable")
     suspend fun deleteAllRemoteKeys()

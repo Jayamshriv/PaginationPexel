@@ -1,6 +1,7 @@
 package com.example.paginationpexel
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -11,8 +12,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -39,7 +44,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
             PaginationPexelTheme {
                     MainScreen()
@@ -61,7 +65,9 @@ fun PexelPhotoList(viewModel: PexelViewModel) {
         modifier = Modifier.fillMaxSize()
     ) {
         items(pexelPhotos.itemCount) { index ->
+            Log.e("PexelPhotos ItemCount", pexelPhotos.itemCount.toString())
             val photo = pexelPhotos[index]
+            Log.e("PexelPhotos ItemCount", photo.toString())
             photo?.let {
                 PexelPhotoItem(photo = it)
             }
@@ -90,20 +96,25 @@ fun PexelPhotoList(viewModel: PexelViewModel) {
 
 @Composable
 fun PexelPhotoItem(photo: PexelEntity) {
-    Column(
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
         modifier = Modifier
-            .fillMaxWidth()
+            .width(300.dp)
+            .height(500.dp)
             .padding(8.dp)
     ) {
-        AsyncImage(
-            model = photo.photos[0].src.original,
-            contentDescription = "photo.alt",
-            modifier = Modifier
-                .height(200.dp)
-                .fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(text = photo.photos[0].photographer, style = MaterialTheme.typography.displaySmall)
-        Text(text = photo.photos[0].photographer, style = MaterialTheme.typography.displayLarge)
+        items(photo.photos.size){index->
+
+            AsyncImage(
+                model = photo.photos[index].src.original,
+                contentDescription = "photo.alt",
+                modifier = Modifier
+                    .height(200.dp)
+                    .fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = photo.photos[index].photographer, style = MaterialTheme.typography.displaySmall)
+            Text(text = photo.photos[index].photographer, style = MaterialTheme.typography.displayLarge)
+        }
     }
 }
